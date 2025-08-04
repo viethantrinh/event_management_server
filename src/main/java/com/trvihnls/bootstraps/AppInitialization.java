@@ -2,6 +2,9 @@ package com.trvihnls.bootstraps;
 
 import com.trvihnls.domains.Role;
 import com.trvihnls.domains.User;
+import com.trvihnls.enums.ErrorCodeEnum;
+import com.trvihnls.enums.RoleEnum;
+import com.trvihnls.exceptions.AppException;
 import com.trvihnls.repositories.RoleRepository;
 import com.trvihnls.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +28,8 @@ public class AppInitialization implements CommandLineRunner {
     }
 
     private void initializeSampleUser() {
-        Role adminRole = Role.builder()
-                .name("ADMIN")
-                .description("manage anything")
-                .build();
-
-        Role savedRole = roleRepository.save(adminRole);
+        Role adminRole = roleRepository.findByName(RoleEnum.ADMIN.getName())
+                .orElseThrow(() -> new AppException(ErrorCodeEnum.REGISTERED_FAILED_ROLE_NOT_EXISTED));
 
         User user0 = User.builder()
                 .email("hntrnn12@gmail.com")
@@ -39,7 +38,7 @@ public class AppInitialization implements CommandLineRunner {
                 .phoneNumber("0768701056")
                 .academicRank("teacher")
                 .academicDegree("master")
-                .roles(Set.of(savedRole))
+                .roles(Set.of(adminRole))
                 .build();
 
         userRepository.save(user0);

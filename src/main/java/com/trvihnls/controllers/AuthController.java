@@ -1,13 +1,13 @@
 package com.trvihnls.controllers;
 
-import com.trvihnls.dtos.auth.SignInRequest;
-import com.trvihnls.dtos.auth.SignInResponse;
+import com.trvihnls.dtos.auth.*;
 import com.trvihnls.dtos.base.ApiResponse;
 import com.trvihnls.enums.SuccessCodeEnum;
 import com.trvihnls.services.AuthService;
 import com.trvihnls.utils.ResponseUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,5 +26,24 @@ public class AuthController {
         SignInResponse response = authService.signIn(request);
         return ResponseUtils.success(SuccessCodeEnum.SIGN_IN_SUCCESS, response);
     }
+
+    @PostMapping(path = "/sign-up")
+    public ResponseEntity<ApiResponse<SignUpResponse>> signUpApi(@RequestBody @Valid SignUpRequest request) {
+        SignUpResponse response = authService.signUp(request);
+        return ResponseUtils.success(SuccessCodeEnum.SIGN_UP_SUCCESS, response);
+    }
+
+    @PostMapping(path = "/sign-out")
+    public ResponseEntity<ApiResponse<Void>> signOutApi(@RequestBody @Valid SignOutRequest request) {
+        authService.signOut(request.getToken());
+        return ResponseUtils.success(SuccessCodeEnum.GENERAL_SUCCESS, null);
+    }
+
+    @PostMapping(path = "/invalidate-token")
+    public ResponseEntity<ApiResponse<InvalidateTokenResponse>> invalidateTokenApi(@RequestBody @Valid InvalidateTokenRequest request) {
+        InvalidateTokenResponse invalidateTokenResponse = authService.verifyToken(request);
+        return ResponseUtils.success(SuccessCodeEnum.GENERAL_SUCCESS, invalidateTokenResponse);
+    }
+
 
 }

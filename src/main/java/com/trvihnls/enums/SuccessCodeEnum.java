@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum SuccessCodeEnum {
     GENERAL_SUCCESS(1000, HttpStatus.OK, "just success"),
-    SIGN_IN_SUCCESS(1001, HttpStatus.OK, "sign in success");
+    SIGN_IN_SUCCESS(1001, HttpStatus.OK, "sign in success"),
+    SIGN_UP_SUCCESS(1002, HttpStatus.CREATED, "sign up success");
 
     private final int code;
     private final HttpStatus status;
