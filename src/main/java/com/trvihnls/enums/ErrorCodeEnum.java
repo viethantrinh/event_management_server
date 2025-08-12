@@ -13,7 +13,9 @@ public enum ErrorCodeEnum {
     UNAUTHENTICATED_GENERATE_TOKEN_ERROR(9003, HttpStatus.UNAUTHORIZED, "sign in failed because token failed to generated"),
     BAD_REQUEST(9004, HttpStatus.BAD_REQUEST, "something wrong with the request body"),
     REGISTERED_FAILED_USER_EXISTED(9005, HttpStatus.CONFLICT, "register failed because user already existed"),
-    REGISTERED_FAILED_ROLE_NOT_EXISTED(9006, HttpStatus.NOT_FOUND, "register failed because role not existed");
+    REGISTERED_FAILED_ROLE_NOT_EXISTED(9006, HttpStatus.NOT_FOUND, "register failed because role not existed"),
+    UNAUTHORIZED(9007, HttpStatus.FORBIDDEN, "can't access this resource"),
+    UNAUTHENTICATED_BAD_TOKEN(9008, HttpStatus.UNAUTHORIZED, "the token is not valid");
 
     private final int code;
     private final HttpStatus status;

@@ -40,7 +40,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final InvalidatedTokenRepository invalidatedTokenRepository;
-    private final JpaContext jpaContext;
 
     @Value("${security.secret-key}")
     private String secretKey;
@@ -195,7 +194,7 @@ public class AuthService {
                 .build();
 
         // build the head of jwt token
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         // build and sign the token
         SignedJWT signedJWT = new SignedJWT(header, jwtClaimsSet);
@@ -216,7 +215,7 @@ public class AuthService {
      * @throws JOSEException If there is an error during the token verification process.
      * @throws ParseException If the token cannot be parsed.
      */
-    private boolean verifyToken(String token) throws JOSEException, ParseException {
+    public boolean verifyToken(String token) throws JOSEException, ParseException {
         // Parse the JWT token
         SignedJWT signedJWT = SignedJWT.parse(token);
         JWSVerifier jwsVerifier = new MACVerifier(secretKey.getBytes());
