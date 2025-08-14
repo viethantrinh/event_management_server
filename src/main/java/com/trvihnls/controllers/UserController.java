@@ -46,4 +46,10 @@ public class UserController {
         userService.deleteUser(userId);
         return ResponseUtils.success(SuccessCodeEnum.GENERAL_SUCCESS, null);
     }
+
+    @GetMapping("/info")
+    public ResponseEntity<ApiResponse<UserResponse>> getUserInfoApi() {
+        UserResponse response = userService.getUserInfo();
+        return ResponseUtils.success(SuccessCodeEnum.GENERAL_SUCCESS, response);
+    }
 }

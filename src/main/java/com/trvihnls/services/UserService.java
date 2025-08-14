@@ -11,6 +11,7 @@ import com.trvihnls.repositories.RoleRepository;
 import com.trvihnls.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,6 +84,17 @@ public class UserService {
     public UserResponse getUserById(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCodeEnum.USER_NOT_EXISTED));
+        return userMapper.fromUserToUserResponse(user);
+    }
+
+
+    public UserResponse getUserInfo() {
+        // Get user id from security context holder
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCodeEnum.USER_NOT_EXISTED));
+
         return userMapper.fromUserToUserResponse(user);
     }
 }
