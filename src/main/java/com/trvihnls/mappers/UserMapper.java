@@ -1,9 +1,12 @@
 package com.trvihnls.mappers;
 
+import com.trvihnls.domains.Role;
 import com.trvihnls.domains.User;
 import com.trvihnls.dtos.user.UserResponse;
+import com.trvihnls.dtos.user.UserUpdateRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -25,5 +28,29 @@ public class UserMapper {
                                 .build())
                         .collect(Collectors.toSet()))
                 .build();
+    }
+
+    public void updateUserFromRequest(User user, UserUpdateRequest request, Set<Role> roles) {
+        if (request.getEmail() != null) {
+            user.setEmail(request.getEmail());
+        }
+        if (request.getWorkEmail() != null) {
+            user.setWorkEmail(request.getWorkEmail());
+        }
+        if (request.getFullName() != null) {
+            user.setFullName(request.getFullName());
+        }
+        if (request.getPhoneNumber() != null) {
+            user.setPhoneNumber(request.getPhoneNumber());
+        }
+        if (request.getAcademicRank() != null) {
+            user.setAcademicRank(request.getAcademicRank());
+        }
+        if (request.getAcademicDegree() != null) {
+            user.setAcademicDegree(request.getAcademicDegree());
+        }
+        if (roles != null) {
+            user.setRoles(roles);
+        }
     }
 }

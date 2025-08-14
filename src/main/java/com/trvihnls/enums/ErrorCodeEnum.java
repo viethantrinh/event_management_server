@@ -15,7 +15,10 @@ public enum ErrorCodeEnum {
     REGISTERED_FAILED_USER_EXISTED(9005, HttpStatus.CONFLICT, "register failed because user already existed"),
     REGISTERED_FAILED_ROLE_NOT_EXISTED(9006, HttpStatus.NOT_FOUND, "register failed because role not existed"),
     UNAUTHORIZED(9007, HttpStatus.FORBIDDEN, "can't access this resource"),
-    UNAUTHENTICATED_BAD_TOKEN(9008, HttpStatus.UNAUTHORIZED, "the token is not valid");
+    UNAUTHENTICATED_BAD_TOKEN(9008, HttpStatus.UNAUTHORIZED, "the token is not valid"),
+    USER_NOT_EXISTED(9009, HttpStatus.NOT_FOUND, "user not found"),
+    USER_EXISTED(9010, HttpStatus.CONFLICT, "user already exists"),
+    ROLE_NOT_EXISTED(9011, HttpStatus.NOT_FOUND, "role not found");
 
     private final int code;
     private final HttpStatus status;
