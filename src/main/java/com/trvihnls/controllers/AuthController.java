@@ -7,7 +7,6 @@ import com.trvihnls.services.AuthService;
 import com.trvihnls.utils.ResponseUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,10 +38,10 @@ public class AuthController {
         return ResponseUtils.success(SuccessCodeEnum.GENERAL_SUCCESS, null);
     }
 
-    @PostMapping(path = "/invalidate-token")
-    public ResponseEntity<ApiResponse<InvalidateTokenResponse>> invalidateTokenApi(@RequestBody @Valid InvalidateTokenRequest request) {
-        InvalidateTokenResponse invalidateTokenResponse = authService.verifyToken(request);
-        return ResponseUtils.success(SuccessCodeEnum.GENERAL_SUCCESS, invalidateTokenResponse);
+    @PostMapping(path = "/introspect-token")
+    public ResponseEntity<ApiResponse<IntrospectTokenResponse>> introspectTokenApi(@RequestBody @Valid IntrospectTokenRequest request) {
+        IntrospectTokenResponse introspectTokenResponse = authService.verifyToken(request);
+        return ResponseUtils.success(SuccessCodeEnum.GENERAL_SUCCESS, introspectTokenResponse);
     }
 
 

@@ -7,8 +7,8 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InvalidateTokenRequest {
-    private String token;
+public class IntrospectTokenResponse {
+    private boolean valid;
 }
 
 

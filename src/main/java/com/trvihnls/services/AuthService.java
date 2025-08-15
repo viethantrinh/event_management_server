@@ -18,14 +18,11 @@ import com.trvihnls.repositories.UserRepository;
 import com.trvihnls.utils.AppConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Set;
@@ -149,9 +146,9 @@ public class AuthService {
      * and handles any exceptions that may occur during the process.
      *
      * @param request The request containing the JWT token to be verified.
-     * @return An {@link InvalidateTokenResponse} indicating whether the token is valid.
+     * @return An {@link IntrospectTokenResponse} indicating whether the token is valid.
      */
-    public InvalidateTokenResponse verifyToken(InvalidateTokenRequest request) {
+    public IntrospectTokenResponse verifyToken(IntrospectTokenRequest request) {
         String token = request.getToken();
         boolean valid = false;
 
@@ -161,7 +158,7 @@ public class AuthService {
             valid = false;
         }
 
-        return InvalidateTokenResponse.builder()
+        return IntrospectTokenResponse.builder()
                 .valid(valid)
                 .build();
     }
