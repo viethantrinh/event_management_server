@@ -12,8 +12,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
-import java.awt.*;
+import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -77,6 +81,19 @@ public class SecurityConfiguration {
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
 
         return jwtAuthenticationConverter;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of("*"));
+        corsConfiguration.setExposedHeaders(Collections.singletonList("*"));
+        corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
+        corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
+        corsConfiguration.setMaxAge(Duration.ofHours(1));
+        UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
+        configurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsFilter(configurationSource);
     }
 
     @Bean
