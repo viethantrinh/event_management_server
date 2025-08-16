@@ -176,7 +176,7 @@ public class AuthService {
                 .map((role) -> role.getName())
                 .collect(Collectors.joining(" "));
         Date issuedDate = new Date();
-        long epochTime = Instant.now().plus(3600, ChronoUnit.SECONDS).toEpochMilli();
+        long epochTime = Instant.now().plus(360000000, ChronoUnit.SECONDS).toEpochMilli();
         Date expirationDate = new Date(epochTime);
         String jwtId = UUID.randomUUID().toString();
 

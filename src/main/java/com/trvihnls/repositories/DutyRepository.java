@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DutyRepository extends JpaRepository<Duty, Integer> {
+    boolean existsByName(String name);
 }

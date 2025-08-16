@@ -18,7 +18,9 @@ public enum ErrorCodeEnum {
     UNAUTHENTICATED_BAD_TOKEN(9008, HttpStatus.UNAUTHORIZED, "the token is not valid"),
     USER_NOT_EXISTED(9009, HttpStatus.NOT_FOUND, "user not found"),
     USER_EXISTED(9010, HttpStatus.CONFLICT, "user already exists"),
-    ROLE_NOT_EXISTED(9011, HttpStatus.NOT_FOUND, "role not found");
+    ROLE_NOT_EXISTED(9011, HttpStatus.NOT_FOUND, "role not found"),
+    DUTY_NOT_EXISTED(9012, HttpStatus.NOT_FOUND, "duty not found"),
+    DUTY_EXISTED(9013, HttpStatus.CONFLICT, "duty already exists");
 
     private final int code;
     private final HttpStatus status;
