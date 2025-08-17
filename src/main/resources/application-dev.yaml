@@ -2,9 +2,9 @@ spring:
   application:
     name: event_management_server
   datasource:
-    url: jdbc:postgresql://${PROD_DB_HOST}:${PROD_DB_PORT}/${PROD_DB_NAME}
-    username: ${PROD_DB_USERNAME}
-    password: ${PROD_DB_PASSWORD}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/event_management}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:021203}
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -13,8 +13,12 @@ spring:
         show_sql: true
         format_sql: true
     defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
 server:
   servlet:
-    context-path: /api
+    context-path: ${CONTEXT_PATH:/api}
 security:
   secret-key: 78040db429b610814e9f299ef8590b28be75aeacd9ff1f3e53bc8b72f4c0c88c
+
