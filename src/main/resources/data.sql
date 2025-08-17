@@ -1,6 +1,31 @@
-INSERT INTO
-    tbl_role(name, description)
-VALUES
-    ('USER', 'user'),
-    ('ADMIN', 'manage everything');
+INSERT INTO tbl_role(name, description)
+VALUES ('USER', 'user'),
+       ('ADMIN', 'manage everything');
 
+INSERT INTO tbl_event (name, description, start_date, end_date)
+VALUES ('Chương trình du xuân', 'Chương trình du xuân', '2024-01-15', '2024-01-17'),
+       ('Hoạt động chào mừng 8-3', 'Hoạt động chào mừng 8-3', '2024-03-08', '2024-03-08'),
+       ('Hoạt động tổng kết năm học', 'Hoạt động tổng kết năm học', '2024-06-15', '2024-06-15'),
+       ('Hoạt động chào mừng 20-10', 'Hoạt động chào mừng 20-10', '2024-10-20', '2024-10-20'),
+       ('Hoạt động hội thao Công đoàn trường', 'Hoạt động hội thao Công đoàn trường', '2024-04-20', '2024-04-21'),
+       ('Hoạt động văn nghệ', 'Hoạt động văn nghệ', '2024-05-01', '2024-05-01'),
+       ('Tổ chức gặp mặt hưu trí', 'Tổ chức gặp mặt hưu trí', '2024-12-20', '2024-12-20'),
+       ('Giải thể thao các trường ĐH-CĐ khu vực Hà Nội', 'Giải thể thao các trường ĐH-CĐ khu vực Hà Nội', '2024-09-15', '2024-09-18'),
+       ('Giải giao hữu các trường ĐH-CĐ khu vực Hà Nội', 'Giải giao hữu các trường ĐH-CĐ khu vực Hà Nội', '2024-11-10', '2024-11-12'),
+       ('Thi đấu thể thao giao lưu khoa tổ chức', 'Thi đấu thể thao giao lưu khoa tổ chức', '2024-07-05', '2024-07-06'),
+       ('Các cuộc họp do CĐ trường tổ chức', 'Các cuộc họp do CĐ trường tổ chức', '2024-02-15', '2024-02-15'),
+       ('Các cuộc họp do CĐ khoa tổ chức', 'Các cuộc họp do CĐ khoa tổ chức', '2024-03-20', '2024-03-20'),
+       ('Họp BCH Công đoàn khoa', 'Họp BCH Công đoàn khoa', '2024-04-10', '2024-04-10'),
+       ('Hoạt động hiếu - hỉ', 'Hoạt động hiếu - hỉ', '2024-08-15', '2024-08-15'),
+       ('Hoạt động từ thiện', 'Hoạt động từ thiện', '2024-09-25', '2024-09-25'),
+       ('Học tập nâng cao trình độ chuyên môn', 'Học tập nâng cao trình độ chuyên môn', '2024-06-01', '2024-06-30'),
+       ('Hoạt động đăng báo khoa học quốc tế CIE/A&HCI/SSCI', 'Hoạt động đăng báo khoa học quốc tế CIE/A&HCI/SSCI', '2024-01-01', '2024-12-31'),
+       ('Hoạt động đăng báo khoa học quốc tế ESCI', 'Hoạt động đăng báo khoa học quốc tế ESCI', '2024-01-01', '2024-12-31'),
+       ('Hoạt động đăng báo khoa học quốc tế Scopus', 'Hoạt động đăng báo khoa học quốc tế Scopus', '2024-01-01', '2024-12-31'),
+       ('Hoạt động đăng báo khoa học trong nước', 'Hoạt động đăng báo khoa học trong nước', '2024-01-01', '2024-12-31'),
+       ('Báo cáo hội thảo quốc tế', 'Báo cáo hội thảo quốc tế', '2024-10-15', '2024-10-17'),
+       ('Báo cáo hội thảo trong nước', 'Báo cáo hội thảo trong nước', '2024-11-20', '2024-11-22'),
+       ('Viết giáo trình', 'Viết giáo trình', '2024-01-01', '2024-12-31'),
+       ('Viết tài liệu tham khảo', 'Viết tài liệu tham khảo', '2024-01-01', '2024-12-31'),
+       ('Viết tài liệu chuyên khảo', 'Viết tài liệu chuyên khảo', '2024-01-01', '2024-12-31'),
+       ('Sáng chế và giải pháp hữu ích', 'Sáng chế và giải pháp hữu ích', '2024-01-01', '2024-12-31');

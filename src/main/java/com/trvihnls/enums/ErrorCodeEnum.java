@@ -20,7 +20,9 @@ public enum ErrorCodeEnum {
     USER_EXISTED(9010, HttpStatus.CONFLICT, "user already exists"),
     ROLE_NOT_EXISTED(9011, HttpStatus.NOT_FOUND, "role not found"),
     DUTY_NOT_EXISTED(9012, HttpStatus.NOT_FOUND, "duty not found"),
-    DUTY_EXISTED(9013, HttpStatus.CONFLICT, "duty already exists");
+    DUTY_EXISTED(9013, HttpStatus.CONFLICT, "duty already exists"),
+    EVENT_NOT_EXISTED(9014, HttpStatus.NOT_FOUND, "event not found"),
+    EVENT_EXISTED(9015, HttpStatus.CONFLICT, "event already exists");
 
     private final int code;
     private final HttpStatus status;
