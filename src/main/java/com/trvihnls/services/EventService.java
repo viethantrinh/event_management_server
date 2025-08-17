@@ -12,6 +12,8 @@ import com.trvihnls.mappers.EventMapper;
 import com.trvihnls.repositories.EventDetailRepository;
 import com.trvihnls.repositories.EventRepository;
 import com.trvihnls.repositories.EventScoreRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,9 @@ public class EventService {
     private final EventDetailRepository eventDetailRepository;
     private final EventScoreRepository eventScoreRepository;
     private final EventMapper eventMapper;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<EventResponse> getAllEvents() {
@@ -54,6 +59,9 @@ public class EventService {
         if (eventRepository.existsByName(request.getName())) {
             throw new AppException(ErrorCodeEnum.EVENT_EXISTED);
         }
+
+        // Validate assignments - ensure no user is assigned to multiple duties
+        validateUserAssignments(request.getAssignments());
 
         // Create the event
         Event event = eventMapper.fromEventCreateRequestToEvent(request);
@@ -103,6 +111,9 @@ public class EventService {
             throw new AppException(ErrorCodeEnum.EVENT_EXISTED);
         }
 
+        // Validate assignments - ensure no user is assigned to multiple duties
+        validateUserAssignments(request.getAssignments());
+
         // Update event basic information
         existingEvent.setName(request.getName());
         existingEvent.setDescription(request.getDescription());
@@ -111,9 +122,19 @@ public class EventService {
 
         Event updatedEvent = eventRepository.save(existingEvent);
 
-        // Remove existing event scores and details
-        eventScoreRepository.deleteAll(existingEvent.getEventScores());
-        eventDetailRepository.deleteAll(existingEvent.getEventDetails());
+        // Use EntityManager for efficient bulk delete operations
+        // Delete existing event scores using bulk delete query
+        entityManager.createQuery("DELETE FROM EventScore es WHERE es.eventId = :eventId")
+                .setParameter("eventId", id)
+                .executeUpdate();
+
+        // Delete existing event details using bulk delete query
+        entityManager.createQuery("DELETE FROM EventDetail ed WHERE ed.eventId = :eventId")
+                .setParameter("eventId", id)
+                .executeUpdate();
+
+        // Flush to ensure deletes are executed before inserts
+        entityManager.flush();
 
         // Create new event scores if duties are provided
         if (request.getDuties() != null && !request.getDuties().isEmpty()) {
@@ -143,6 +164,9 @@ public class EventService {
             eventDetailRepository.saveAll(eventDetails);
         }
 
+        // Clear the persistence context to ensure fresh data
+        entityManager.clear();
+
         return eventMapper.fromEventToEventResponse(updatedEvent);
     }
 
@@ -152,11 +176,44 @@ public class EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCodeEnum.EVENT_NOT_EXISTED));
 
-        // Delete related records first (due to foreign key constraints)
-        eventScoreRepository.deleteAll(event.getEventScores());
-        eventDetailRepository.deleteAll(event.getEventDetails());
+        // Use EntityManager for efficient bulk delete operations
+        // Delete existing event scores using bulk delete query
+        entityManager.createQuery("DELETE FROM EventScore es WHERE es.eventId = :eventId")
+                .setParameter("eventId", id)
+                .executeUpdate();
+
+        // Delete existing event details using bulk delete query
+        entityManager.createQuery("DELETE FROM EventDetail ed WHERE ed.eventId = :eventId")
+                .setParameter("eventId", id)
+                .executeUpdate();
+
+        // Flush to ensure deletes are executed before deleting the event
+        entityManager.flush();
 
         // Delete the event itself
         eventRepository.delete(event);
+    }
+
+    /**
+     * Validate that no user is assigned to multiple duties in the same event
+     */
+    private void validateUserAssignments(List<EventCreateRequest.AssignmentRequest> assignments) {
+        if (assignments == null || assignments.isEmpty()) {
+            return;
+        }
+
+        // Extract all user IDs from assignments
+        Set<String> assignedUserIds = new HashSet<>();
+
+        for (EventCreateRequest.AssignmentRequest assignment : assignments) {
+            String userId = assignment.getUserId();
+
+            // Check if this user is already assigned to another duty
+            if (assignedUserIds.contains(userId)) {
+                throw new AppException(ErrorCodeEnum.USER_ALREADY_ASSIGNED_IN_EVENT);
+            }
+
+            assignedUserIds.add(userId);
+        }
     }
 }

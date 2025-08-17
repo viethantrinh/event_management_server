@@ -143,7 +143,7 @@ public class AppInitialization implements CommandLineRunner {
                 .orElseThrow(() -> new AppException(ErrorCodeEnum.REGISTERED_FAILED_ROLE_NOT_EXISTED));
 
         User user0 = User.builder()
-//                .id("190ce620-7375-4d96-b2da-41bc21a19507")
+                .id("190ce620-7375-4d96-b2da-41bc21a19507")
                 .email("hntrnn12@gmail.com")
                 .password(passwordEncoder.encode("Sohappy212@"))
                 .fullName("Viet Han Trinh0")
@@ -154,7 +154,7 @@ public class AppInitialization implements CommandLineRunner {
                 .build();
 
         User user1 = User.builder()
-//                .id("bae8d5f9-5d8c-4d81-9c3a-7bf139a46d12")
+                .id("bae8d5f9-5d8c-4d81-9c3a-7bf139a46d12")
                 .email("hntrnn13@gmail.com")
                 .password(passwordEncoder.encode("Sohappy212@"))
                 .fullName("Viet Han Trinh1")

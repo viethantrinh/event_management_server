@@ -93,6 +93,7 @@ public class AuthService {
                 .orElseThrow(() -> new AppException(ErrorCodeEnum.REGISTERED_FAILED_ROLE_NOT_EXISTED));
 
         User registerUser = User.builder()
+                .id(UUID.randomUUID().toString())
                 .email(request.getEmail())
                 .workEmail(request.getWorkEmail())
                 .password(passwordEncoder.encode(request.getPassword()))

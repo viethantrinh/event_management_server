@@ -15,7 +15,6 @@ import java.util.Set;
 @Table(name = "tbl_user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @Column(nullable = false, unique = true, length = 64)
