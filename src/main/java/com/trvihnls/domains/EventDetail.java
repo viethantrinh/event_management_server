@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "tbl_event_detail", uniqueConstraints = {
-        @UniqueConstraint(name = "uq_event_duty", columnNames = {"event_id", "duty_id"})
+        @UniqueConstraint(name = "uq_event_user", columnNames = {"event_id", "user_id"})
 })
 public class EventDetail {
 
@@ -21,7 +21,7 @@ public class EventDetail {
     @Column(name = "event_id", nullable = false)
     private Integer eventId;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     private String userId;
 
     @Column(name = "duty_id")
