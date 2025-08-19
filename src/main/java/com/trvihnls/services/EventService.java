@@ -122,47 +122,52 @@ public class EventService {
 
         Event updatedEvent = eventRepository.save(existingEvent);
 
-        // Use EntityManager for efficient bulk delete operations
-        // Delete existing event scores using bulk delete query
-        entityManager.createQuery("DELETE FROM EventScore es WHERE es.eventId = :eventId")
-                .setParameter("eventId", id)
-                .executeUpdate();
+        // Only update EventScore if duties are explicitly provided in the request
+        if (request.getDuties() != null) {
+            // Delete existing event scores using bulk delete query
+            entityManager.createQuery("DELETE FROM EventScore es WHERE es.eventId = :eventId")
+                    .setParameter("eventId", id)
+                    .executeUpdate();
 
-        // Delete existing event details using bulk delete query
-        entityManager.createQuery("DELETE FROM EventDetail ed WHERE ed.eventId = :eventId")
-                .setParameter("eventId", id)
-                .executeUpdate();
+            // Create new event scores if duties are provided
+            if (!request.getDuties().isEmpty()) {
+                Set<EventScore> eventScores = new HashSet<>();
+                for (EventCreateRequest.DutyScoreRequest dutyScore : request.getDuties()) {
+                    EventScore eventScore = EventScore.builder()
+                            .eventId(updatedEvent.getId())
+                            .dutyId(dutyScore.getDutyId())
+                            .score(dutyScore.getScore())
+                            .build();
+                    eventScores.add(eventScore);
+                }
+                eventScoreRepository.saveAll(eventScores);
+            }
+        }
 
-        // Flush to ensure deletes are executed before inserts
+        // Only update EventDetail if assignments are explicitly provided in the request
+        if (request.getAssignments() != null) {
+            // Delete existing event details using bulk delete query
+            entityManager.createQuery("DELETE FROM EventDetail ed WHERE ed.eventId = :eventId")
+                    .setParameter("eventId", id)
+                    .executeUpdate();
+
+            // Create new event assignments if provided and not empty
+            if (!request.getAssignments().isEmpty()) {
+                Set<EventDetail> eventDetails = new HashSet<>();
+                for (EventCreateRequest.AssignmentRequest assignment : request.getAssignments()) {
+                    EventDetail eventDetail = EventDetail.builder()
+                            .eventId(updatedEvent.getId())
+                            .userId(assignment.getUserId())
+                            .dutyId(assignment.getDutyId())
+                            .build();
+                    eventDetails.add(eventDetail);
+                }
+                eventDetailRepository.saveAll(eventDetails);
+            }
+        }
+
+        // Flush to ensure all changes are executed
         entityManager.flush();
-
-        // Create new event scores if duties are provided
-        if (request.getDuties() != null && !request.getDuties().isEmpty()) {
-            Set<EventScore> eventScores = new HashSet<>();
-            for (EventCreateRequest.DutyScoreRequest dutyScore : request.getDuties()) {
-                EventScore eventScore = EventScore.builder()
-                        .eventId(updatedEvent.getId())
-                        .dutyId(dutyScore.getDutyId())
-                        .score(dutyScore.getScore())
-                        .build();
-                eventScores.add(eventScore);
-            }
-            eventScoreRepository.saveAll(eventScores);
-        }
-
-        // Create new event assignments if provided
-        if (request.getAssignments() != null && !request.getAssignments().isEmpty()) {
-            Set<EventDetail> eventDetails = new HashSet<>();
-            for (EventCreateRequest.AssignmentRequest assignment : request.getAssignments()) {
-                EventDetail eventDetail = EventDetail.builder()
-                        .eventId(updatedEvent.getId())
-                        .userId(assignment.getUserId())
-                        .dutyId(assignment.getDutyId())
-                        .build();
-                eventDetails.add(eventDetail);
-            }
-            eventDetailRepository.saveAll(eventDetails);
-        }
 
         // Clear the persistence context to ensure fresh data
         entityManager.clear();
