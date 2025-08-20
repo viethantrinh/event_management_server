@@ -3,9 +3,7 @@ package com.trvihnls.services;
 import com.trvihnls.domains.Event;
 import com.trvihnls.domains.EventDetail;
 import com.trvihnls.domains.EventScore;
-import com.trvihnls.dtos.event.EventCreateRequest;
-import com.trvihnls.dtos.event.EventDetailResponse;
-import com.trvihnls.dtos.event.EventResponse;
+import com.trvihnls.dtos.event.*;
 import com.trvihnls.enums.ErrorCodeEnum;
 import com.trvihnls.exceptions.AppException;
 import com.trvihnls.mappers.EventMapper;
@@ -19,10 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -197,6 +192,43 @@ public class EventService {
 
         // Delete the event itself
         eventRepository.delete(event);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public EventReportResponse getEventReport(Integer eventId) {
+        // Validate event exists
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new AppException(ErrorCodeEnum.EVENT_NOT_EXISTED));
+
+        // Get event participants
+        List<EventParticipantInfo> participants = eventRepository.findEventParticipants(eventId);
+
+        // Update sequence numbers
+        for (int i = 0; i < participants.size(); i++) {
+            participants.get(i).setSequenceNumber(i + 1);
+        }
+
+        // Get duty distribution
+        List<Object[]> dutyDistributionData = eventRepository.findDutyDistribution(eventId);
+        Map<String, Integer> dutyDistribution = new HashMap<>();
+        for (Object[] row : dutyDistributionData) {
+            dutyDistribution.put((String) row[0], ((Long) row[1]).intValue());
+        }
+
+        // Calculate statistics
+        int totalParticipants = participants.size();
+
+        // Build and return response
+        return EventReportResponse.builder()
+                .eventId(event.getId())
+                .eventName(event.getName())
+                .eventDescription(event.getDescription())
+                .startDate(event.getStartDate())
+                .endDate(event.getEndDate())
+                .participants(participants)
+                .totalParticipants(totalParticipants)
+                .dutyDistribution(dutyDistribution)
+                .build();
     }
 
     /**

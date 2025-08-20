@@ -1,6 +1,7 @@
 package com.trvihnls.controllers;
 
 import com.trvihnls.dtos.base.ApiResponse;
+import com.trvihnls.dtos.user.UserCreateRequest;
 import com.trvihnls.dtos.user.UserResponse;
 import com.trvihnls.dtos.user.UserUpdateRequest;
 import com.trvihnls.enums.SuccessCodeEnum;
@@ -50,6 +51,12 @@ public class UserController {
     @GetMapping("/info")
     public ResponseEntity<ApiResponse<UserResponse>> getUserInfoApi() {
         UserResponse response = userService.getUserInfo();
+        return ResponseUtils.success(SuccessCodeEnum.GENERAL_SUCCESS, response);
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiResponse<UserResponse>> createUserApi(@Valid @RequestBody UserCreateRequest request) {
+        UserResponse response = userService.createUser(request);
         return ResponseUtils.success(SuccessCodeEnum.GENERAL_SUCCESS, response);
     }
 }

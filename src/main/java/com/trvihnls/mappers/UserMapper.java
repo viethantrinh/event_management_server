@@ -2,6 +2,7 @@ package com.trvihnls.mappers;
 
 import com.trvihnls.domains.Role;
 import com.trvihnls.domains.User;
+import com.trvihnls.dtos.user.UserCreateRequest;
 import com.trvihnls.dtos.user.UserResponse;
 import com.trvihnls.dtos.user.UserUpdateRequest;
 import org.springframework.stereotype.Component;
@@ -52,5 +53,19 @@ public class UserMapper {
         if (roles != null) {
             user.setRoles(roles);
         }
+    }
+
+    public User fromUserCreateRequestToUser(UserCreateRequest request, String id, String encodedPassword, Set<Role> roles) {
+        return User.builder()
+                .id(id)
+                .email(request.getEmail())
+                .workEmail(request.getWorkEmail())
+                .password(encodedPassword)
+                .fullName(request.getFullName())
+                .phoneNumber(request.getPhoneNumber())
+                .academicRank(request.getAcademicRank())
+                .academicDegree(request.getAcademicDegree())
+                .roles(roles)
+                .build();
     }
 }
